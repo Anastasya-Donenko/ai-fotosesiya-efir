@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="uk"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#061019">
+<title>AI-фотосесія без зйомок · Ефір</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   AI MONEY CLUB · AI START — еталонний шаблон навички v3
+   ========================================================= */
+:root{
+  --bg:#061019;
+  --surface:rgba(255,255,255,.042);
+  --mint:#2fe3d0;
+  --lime:#c9e88c;
+  --gold:#efc35f;
+  --gold-hi:#ffdd94;
+  --coral:#d9795a;
+  --coral-hi:#e89a7a;
+  --violet:#a855f7;
+  --text:#f2f8fc;
+  --muted:#93aabb;
+  --line:rgba(255,255,255,.1);
+  --line-2:rgba(255,255,255,.18);
+  --display:"Montserrat",system-ui,sans-serif;
+  --body:"Manrope",system-ui,sans-serif;
+  --mono:ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  --u:clamp(11px, min(1.12vw, 1.95vh), 24px);
+  --t-body:calc(var(--u) * 1.36);
+  --t-lead:calc(var(--u) * 1.76);
+  --t-h3:calc(var(--u) * 1.66);
+  --t-h2:calc(var(--u) * 3.7);
+  --t-h1:calc(var(--u) * 5.5);
+  --t-small:calc(var(--u) * 1.15);
+  --t-eyebrow:calc(var(--u) * .95);
+  --gap:calc(var(--u) * 1.8);
+  --pad-card:calc(var(--u) * 2.25);
+  --air:calc(var(--u) * 3.3);
+  --pad-x:clamp(20px, 4.6vw, 104px);
+  --pad-y:clamp(24px, 5vh, 62px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden}
+html{scroll-behavior:smooth;color-scheme:dark;background-color:#061019;}
+body{background-color:#061019;color:var(--text);font-family:var(--body);-webkit-font-smoothing:antialiased;font-size:var(--t-body);-webkit-hyphens:none;hyphens:none;word-break:normal;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 66rem 44rem at 2% -10%,rgba(47,227,208,.15),transparent 62%),radial-gradient(ellipse 54rem 40rem at 100% 0%,rgba(239,195,95,.075),transparent 62%),#061019;}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+/* ---------- каркас ---------- */
+.deck{width:100%;position:relative;z-index:1}
+.slide{min-height:100vh;min-height:100svh;scroll-snap-align:start;display:flex;align-items:center;padding:var(--pad-y) var(--pad-x);position:relative;overflow:visible}
+.slide__inner{position:relative;z-index:1;width:min(1660px,100%);margin:0 auto;display:flex;flex-direction:column;justify-content:center;gap:var(--air)}
+.slide::after{content:attr(data-n);position:absolute;bottom:calc(var(--u)*1.2);left:var(--pad-x);font:800 var(--t-eyebrow)/1 var(--body);letter-spacing:.18em;color:rgba(147,170,187,.6)}
+.head{display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--u)*1.15)}
+.head h1,.head h2{margin:0}
+/* ---------- прогрес / навігація ---------- */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;z-index:40;background:rgba(255,255,255,.07)}
+.progress__bar{height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--lime),var(--gold));transition:width .18s linear}
+@media (min-width:1024px){.slide{padding-right:calc(var(--pad-x) + var(--u)*3.4)}}
+/* ---------- бічна панель навігації ---------- */
+.rail{position:fixed;z-index:35;right:calc(var(--u)*.7);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*.5);padding:calc(var(--u)*.5);border-radius:99px;background:rgba(3,8,13,.6);border:1px solid var(--line);backdrop-filter:blur(10px)}
+.rail__btn{display:grid;place-items:center;width:calc(var(--u)*2.4);height:calc(var(--u)*2.4);border:0;border-radius:99px;background:rgba(255,255,255,.08);color:var(--text);cursor:pointer;transition:.18s}
+.rail__btn svg{width:calc(var(--u)*1.3);height:calc(var(--u)*1.3);fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.rail__btn:hover{background:rgba(47,227,208,.24)}
+.rail__btn:active{background:var(--mint);color:#03080d}
+.rail__btn:disabled{opacity:.25;cursor:default;background:rgba(255,255,255,.05)}
+.dots{display:grid;gap:6px;padding:calc(var(--u)*.35) 0}
+.dot{width:6px;height:6px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.26);cursor:pointer;transition:.25s}
+.dot.is-on{height:20px;background:var(--mint);box-shadow:0 0 12px rgba(47,227,208,.7)}
+.rail__count{display:none;min-width:calc(var(--u)*3.6);text-align:center;font:800 var(--t-small) var(--body);color:var(--muted);letter-spacing:.06em}
+/* ---------- типографіка ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:calc(var(--u)*.6);padding:calc(var(--u)*.68) calc(var(--u)*1.25);border-radius:99px;border:1px solid rgba(47,227,208,.44);background:rgba(47,227,208,.08);color:var(--mint);font:800 var(--t-eyebrow) var(--body);letter-spacing:.2em;text-transform:uppercase}
+.eyebrow--gold{border-color:rgba(239,195,95,.46);background:rgba(239,195,95,.09);color:var(--gold)}
+.eyebrow svg{width:calc(var(--u)*1.35);height:calc(var(--u)*1.35)}
+h1,h2{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:-.022em;line-height:.96}
+h1{font-size:var(--t-h1)}
+h2{font-size:var(--t-h2)}
+h3{font-family:var(--display);font-weight:800;font-size:var(--t-h3);line-height:1.16;margin:0 0 calc(var(--u)*.45);letter-spacing:-.01em}
+.grad{background:linear-gradient(96deg,#fff 0%,#fff 32%,var(--mint) 63%,var(--lime) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad-gold{background:linear-gradient(96deg,#fff 0%,#fff 30%,var(--gold) 64%,var(--gold-hi) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:var(--t-lead);line-height:1.44;color:#d3e2ef;max-width:58ch;margin:0}
+p,li{font-size:var(--t-body);line-height:1.5;margin:0}
+.muted{color:var(--muted)}.mint{color:var(--mint)}.gold{color:var(--gold)}
+.note{display:flex;gap:calc(var(--u)*1.05);align-items:center;padding:calc(var(--u)*1.25) calc(var(--u)*1.6);border-radius:calc(var(--u)*1.15);border:1px solid rgba(47,227,208,.3);background:rgba(47,227,208,.06);font-size:var(--t-body);line-height:1.42}
+.note b{color:var(--mint)}
+.note svg{flex:none;width:calc(var(--u)*2);height:calc(var(--u)*2);color:var(--mint)}
+.note--gold{border-color:rgba(239,195,95,.32);background:rgba(239,195,95,.06)}
+.note--gold svg,.note--gold b{color:var(--gold)}
+/* ---------- іконки ---------- */
+.ico{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ibox{flex:none;display:grid;place-items:center;width:calc(var(--u)*3.3);height:calc(var(--u)*3.3);border-radius:calc(var(--u)*1);background:rgba(47,227,208,.12);border:1px solid rgba(47,227,208,.34);color:var(--mint);font-size:calc(var(--u)*1.75)}
+.ibox--gold{background:rgba(239,195,95,.12);border-color:rgba(239,195,95,.34);color:var(--gold)}
+.ibox--coral{background:rgba(217,121,90,.14);border-color:rgba(217,121,90,.38);color:var(--coral-hi)}
+/* ---------- HERO ---------- */
+.hero{display:grid;grid-template-columns:1.04fr .96fr;gap:calc(var(--u)*4);align-items:center}
+.hero__chips{display:flex;flex-wrap:wrap;gap:calc(var(--u)*.7);margin-top:calc(var(--u)*2.2)}
+.hero__chips span{padding:calc(var(--u)*.78) calc(var(--u)*1.3);border-radius:99px;background:var(--surface);border:1px solid var(--line);font-weight:700;font-size:var(--t-small)}
+/* ---------- картки ---------- */
+.cards{display:grid;gap:var(--gap)}
+.c2{grid-template-columns:repeat(2,1fr)}
+.c3{grid-template-columns:repeat(3,1fr)}
+.card{padding:var(--pad-card);border:1px solid var(--line);border-radius:calc(var(--u)*1.6);background:var(--surface)}
+.card--row{display:flex;gap:calc(var(--u)*1.2);align-items:flex-start}
+.card--mid{align-items:center}
+.card--mid h3{margin:0}
+.card p{color:var(--muted);font-size:var(--t-small);margin-top:calc(var(--u)*.35)}
+.card--q blockquote{margin:calc(var(--u)*1.1) 0 0;padding-left:calc(var(--u)*1);border-left:2px solid rgba(47,227,208,.5);color:#d8e6f1;font-size:var(--t-small);line-height:1.44}
+/* ---------- вибір ---------- */
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*2)}
+.pick__col{padding:calc(var(--u)*2.5);border:1px solid var(--line);border-radius:calc(var(--u)*1.8);background:var(--surface)}
+.pick__col--mint{border-color:rgba(47,227,208,.5)}
+.pick__col--coral{border-color:rgba(217,121,90,.5)}
+.pick__head{display:flex;align-items:center;gap:calc(var(--u)*1.05);margin-bottom:calc(var(--u)*1.5)}
+.pick__head h3{margin:0}
+.pick__col ul{margin:0;padding-left:calc(var(--u)*1.25);list-style:none}
+.pick__col li{position:relative;margin:calc(var(--u)*.9) 0;color:#d5e3ef}
+.pick__col li::before{content:'';position:absolute;left:calc(var(--u)*-1.25);top:.62em;width:calc(var(--u)*.44);height:calc(var(--u)*.44);border-radius:99px;background:var(--mint)}
+.pick__col--coral li::before{background:var(--coral)}
+/* ---------- кроки ---------- */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap)}
+.step{padding:var(--pad-card);border:1px solid var(--line);border-radius:calc(var(--u)*1.6);background:var(--surface)}
+.step__n{font:900 calc(var(--u)*3.4)/1 var(--display);color:var(--gold);margin-bottom:calc(var(--u)*1)}
+.step p{color:var(--muted);font-size:var(--t-small);margin-top:calc(var(--u)*.4)}
+/* ---------- СЛАЙД ПОМИЛОК ---------- */
+.slide--warn{background:radial-gradient(ellipse 70rem 42rem at 50% -14%,rgba(239,195,95,.15),transparent 62%),radial-gradient(ellipse 46rem 34rem at 96% 104%,rgba(217,121,90,.11),transparent 62%);}
+.slide--warn::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(135deg,rgba(239,195,95,.06) 0 12px,transparent 12px 32px);-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 52%);mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 52%);}
+.fixlist{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap)}
+.fixcard{border:1px solid rgba(239,195,95,.32);border-radius:calc(var(--u)*1.6);overflow:hidden;background:rgba(255,255,255,.028)}
+.fixcard__problem{display:flex;gap:calc(var(--u)*1.1);align-items:center;padding:calc(var(--u)*1.35) calc(var(--u)*1.7);background:rgba(239,195,95,.1);border-bottom:1px solid rgba(239,195,95,.24)}
+.fixcard__problem h3{margin:0;color:var(--gold-hi)}
+.fixcard__fix{display:flex;gap:calc(var(--u)*1.1);align-items:flex-start;padding:calc(var(--u)*1.35) calc(var(--u)*1.7)}
+.fixcard__fix p{color:#d5e3ef;font-size:var(--t-body)}
+.tick{flex:none;display:grid;place-items:center;width:calc(var(--u)*2.5);height:calc(var(--u)*2.5);border-radius:calc(var(--u)*.8);background:rgba(47,227,208,.14);border:1px solid rgba(47,227,208,.4);color:var(--mint);font-size:calc(var(--u)*1.4)}
+/* ---------- промпт ---------- */
+.prompt-layout{display:grid;grid-template-columns:1.32fr .68fr;gap:calc(var(--u)*1.9);align-items:start}
+.prompt{border:1px solid rgba(47,227,208,.45);border-radius:calc(var(--u)*1.6);overflow:hidden;background:rgba(2,9,15,.68)}
+.prompt__head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:calc(var(--u)*.85) calc(var(--u)*1.4);background:rgba(47,227,208,.09);border-bottom:1px solid var(--line)}
+.prompt__head b{font:800 var(--t-eyebrow) var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--mint)}
+.btn{border:1px solid var(--line-2);border-radius:11px;background:rgba(255,255,255,.08);color:var(--text);padding:calc(var(--u)*.62) calc(var(--u)*1.15);font:800 var(--t-small) var(--body);cursor:pointer;transition:.2s;white-space:nowrap}
+.btn:hover{background:rgba(47,227,208,.18);border-color:rgba(47,227,208,.5)}
+.btn.is-done{background:var(--mint);color:#03080d;border-color:var(--mint)}
+.prompt__text{margin:0;padding:calc(var(--u)*1.35);white-space:pre-wrap;font:500 calc(var(--u)*1.1)/1.55 var(--mono);color:#e8f6ff;max-height:46vh;overflow:auto}
+.prompt__text mark{background:rgba(239,195,95,.18);color:var(--gold-hi);border-radius:4px;padding:0 4px}
+/* ---------- практика ---------- */
+.slide--practice{background:radial-gradient(ellipse 70rem 44rem at 50% -12%,rgba(47,227,208,.17),transparent 62%),radial-gradient(ellipse 44rem 32rem at 4% 104%,rgba(201,232,140,.1),transparent 62%);}
+.slide--practice::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(135deg,rgba(47,227,208,.055) 0 12px,transparent 12px 32px);-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.85),transparent 50%);mask-image:linear-gradient(180deg,rgba(0,0,0,.85),transparent 50%);}
+.practice{display:grid;grid-template-columns:1.3fr .7fr;gap:calc(var(--u)*2)}
+.practice__steps{margin:0;padding:0;list-style:none;display:grid;gap:calc(var(--u)*1)}
+.practice__steps li{display:flex;gap:calc(var(--u)*1.2);align-items:flex-start;padding:calc(var(--u)*1.35) calc(var(--u)*1.7);border:1px solid var(--line);border-radius:calc(var(--u)*1.35);background:var(--surface)}
+.practice__steps li b{flex:none;display:grid;place-items:center;width:calc(var(--u)*2.7);height:calc(var(--u)*2.7);border-radius:calc(var(--u)*.85);background:rgba(47,227,208,.15);border:1px solid rgba(47,227,208,.4);color:var(--mint);font:900 var(--t-small) var(--display)}
+.practice__steps li span{font-size:var(--t-body);line-height:1.42;color:#dceaf5}
+.practice__steps li span i{font-style:normal;color:var(--mint);font-weight:700}
+.practice__done{display:flex;flex-direction:column;justify-content:center;padding:calc(var(--u)*2);border:1px solid rgba(47,227,208,.5);border-radius:calc(var(--u)*1.6);background:linear-gradient(170deg,rgba(47,227,208,.13),rgba(255,255,255,.02))}
+.practice__done .ibox{margin-bottom:calc(var(--u)*1.1)}
+.practice__done p{color:#dceaf5;font-size:var(--t-body);line-height:1.44}
+.pause{display:flex;align-items:center;gap:calc(var(--u)*1.2);padding:calc(var(--u)*1.35) calc(var(--u)*1.8);border-radius:calc(var(--u)*1.25);border:1px solid rgba(47,227,208,.5);background:linear-gradient(94deg,rgba(47,227,208,.17),rgba(201,232,140,.05));font-size:var(--t-body);line-height:1.4}
+.pause svg{flex:none;width:calc(var(--u)*2.2);height:calc(var(--u)*2.2);color:var(--mint)}
+.pause b{color:var(--mint)}
+/* ---------- фінал ---------- */
+.hook{display:grid;grid-template-columns:auto 1fr;gap:calc(var(--u)*1.6);align-items:center;padding:calc(var(--u)*2);border-left:3px solid var(--mint);border-radius:0 calc(var(--u)*1.5) calc(var(--u)*1.5) 0;background:linear-gradient(94deg,rgba(47,227,208,.12),rgba(255,255,255,.02))}
+.hook__n{flex:none;display:grid;place-items:center;width:calc(var(--u)*5);height:calc(var(--u)*5);border-radius:calc(var(--u)*1.5);background:rgba(47,227,208,.16);border:1px solid rgba(47,227,208,.45);color:var(--mint);font:900 calc(var(--u)*2.2) var(--display)}
+.hook p{font-size:var(--t-lead);line-height:1.42;color:#e0edf7}
+.hook b{color:var(--mint)}
+/* ---------- поява ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .slide__inner>*{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+  .slide.is-in .slide__inner>*{opacity:1;transform:none}
+  .slide.is-in .slide__inner>*:nth-child(2){transition-delay:.09s}
+  .slide.is-in .slide__inner>*:nth-child(3){transition-delay:.17s}
+  .slide.is-in .slide__inner>*:nth-child(4){transition-delay:.25s}
+}
+/* ---------- планшет ---------- */
+@media (max-width:1023px){
+  html{scroll-snap-type:y proximity}
+  :root{--u:clamp(11px,1.9vw,17px);--air:calc(var(--u)*2.4);--t-h1:clamp(40px,6.4vw,68px);--t-h2:clamp(30px,4.6vw,50px);}
+  h1,h2{overflow-wrap:break-word}
+  .hero,.prompt-layout{grid-template-columns:1fr}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .rail{flex-direction:row;right:auto;left:50%;bottom:14px;top:auto;transform:translateX(-50%);gap:6px;padding:6px;background:rgba(3,8,13,.85);border-color:var(--line-2)}
+  .rail__btn{width:44px;height:44px}
+  .rail__btn svg{width:20px;height:20px}
+  .dots{display:none}
+  .rail__count{display:block}
+}
+/* ---------- мобільний ---------- */
+@media (max-width:640px){
+  :root{--u:clamp(12px,3.7vw,17px);--air:calc(var(--u)*1.8);--pad-x:16px;--t-h1:clamp(29px,7.8vw,42px);--t-h2:clamp(24px,6.3vw,34px);--t-lead:clamp(15px,4.1vw,19px);--t-body:clamp(14.5px,3.9vw,18px);--t-h3:clamp(16px,4.3vw,20px);--t-small:clamp(13px,3.5vw,16px);}
+  html{scroll-snap-type:y proximity}
+  .slide{min-height:100svh;height:auto;align-items:flex-start;padding-bottom:calc(var(--u)*6);overflow:visible}
+  .c2,.c3,.cards.c2,.cards.c3,.steps,.pick,.fixlist,.prompt-layout,.hero,.practice{grid-template-columns:1fr}
+}
+
+/* =========================================================
+   РЕДАКТОР — стилі
+   ========================================================= */
+#ed-bar{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:9100;
+  display:flex;align-items:center;gap:8px;padding:10px 16px;
+  background:rgba(6,16,25,.97);border:1px solid rgba(47,227,208,.55);
+  border-radius:14px;backdrop-filter:blur(16px);
+  box-shadow:0 8px 32px rgba(0,0,0,.55);
+  font-family:"Manrope",system-ui,sans-serif;font-size:13px;white-space:nowrap;
+}
+#ed-bar button{
+  border:1px solid rgba(255,255,255,.18);border-radius:8px;
+  background:rgba(255,255,255,.08);color:#f2f8fc;
+  padding:7px 14px;font:700 13px/1 "Manrope",sans-serif;
+  cursor:pointer;transition:.18s;
+}
+#ed-bar button:hover{background:rgba(47,227,208,.22);border-color:rgba(47,227,208,.5);}
+#ed-toggle.is-on{background:rgba(47,227,208,.18);border-color:rgba(47,227,208,.7);color:#2fe3d0;}
+.ed-sep{width:1px;height:24px;background:rgba(255,255,255,.14);}
+.ed-actions{display:none;align-items:center;gap:8px;}
+/* панель слайду */
+.ed-slide-bar{
+  display:none;position:absolute;top:20px;right:calc(var(--pad-x) + 56px);z-index:60;
+  gap:6px;
+  background:rgba(6,16,25,.92);border:1px solid rgba(47,227,208,.4);
+  border-radius:10px;padding:6px;backdrop-filter:blur(10px);
+}
+body.is-edit .ed-slide-bar{display:flex;}
+.ed-slide-bar button{
+  width:34px;height:34px;border:1px solid rgba(255,255,255,.15);border-radius:7px;
+  background:rgba(255,255,255,.07);color:#f2f8fc;font-size:15px;
+  cursor:pointer;display:grid;place-items:center;transition:.18s;line-height:1;
+  font-family:"Manrope",sans-serif;padding:0;
+}
+.ed-slide-bar button:hover{background:rgba(47,227,208,.22);border-color:rgba(47,227,208,.5);}
+.ed-del:hover{background:rgba(220,80,80,.22) !important;border-color:rgba(220,80,80,.5) !important;}
+/* перетягування блоків */
+body.is-edit .is-dragging{opacity:.35;}
+body.is-edit .drag-over{outline:2px dashed rgba(47,227,208,.7);outline-offset:3px;}
+/* ручка перетягування */
+.ed-drag-hdl{display:none;position:absolute;top:6px;left:6px;z-index:10;
+  cursor:grab;padding:2px 5px;font-size:15px;line-height:1;
+  color:rgba(47,227,208,.65);background:rgba(6,16,25,.82);border-radius:4px;user-select:none;}
+body.is-edit .card:hover .ed-drag-hdl,body.is-edit .step:hover .ed-drag-hdl,
+body.is-edit .fixcard:hover .ed-drag-hdl,body.is-edit .pick__col:hover .ed-drag-hdl{display:block;}
+/* кнопка розширення */
+.ed-wide-btn{display:none;position:absolute;top:6px;right:6px;z-index:10;
+  width:22px;height:22px;border:1px solid rgba(47,227,208,.5);border-radius:5px;
+  background:rgba(6,16,25,.88);color:var(--mint);font-size:12px;cursor:pointer;
+  padding:0;align-items:center;justify-content:center;}
+body.is-edit .card:hover .ed-wide-btn,body.is-edit .step:hover .ed-wide-btn,
+body.is-edit .fixcard:hover .ed-wide-btn,body.is-edit .pick__col:hover .ed-wide-btn{display:flex;}
+.ed-wide-btn.is-on{background:rgba(47,227,208,.22);}
+.ed-full{grid-column:1/-1 !important;}
+/* вставка зображень */
+.ed-img-wrap{user-select:none;touch-action:none;position:absolute;z-index:50;}
+body.is-edit .ed-img-wrap{cursor:move;}
+.ed-img-wrap img{width:100%;display:block;border-radius:8px;pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.5);}
+.ed-img-del,.ed-img-rz,.ed-img-rot{display:none;}
+body.is-edit .ed-img-rz{display:block;position:absolute;bottom:-7px;right:-7px;width:16px;height:16px;
+  background:var(--mint);border:2px solid #061019;border-radius:3px;cursor:se-resize;touch-action:none;}
+body.is-edit .ed-img-wrap:hover .ed-img-del{display:grid;position:absolute;top:-11px;right:-11px;
+  width:26px;height:26px;border:0;border-radius:50%;background:rgba(220,50,50,.9);
+  color:#fff;font-size:12px;cursor:pointer;place-items:center;padding:0;font-family:sans-serif;}
+body.is-edit .ed-img-rot{display:block;position:absolute;top:-32px;left:50%;transform:translateX(-50%);
+  width:20px;height:20px;background:rgba(47,227,208,.9);border:2px solid #061019;border-radius:50%;
+  cursor:grab;touch-action:none;font-size:11px;display:flex;align-items:center;justify-content:center;color:#061019;}
+body.is-edit .ed-img-rot::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  width:1px;height:10px;background:rgba(47,227,208,.6);}
+/* меню додавання блоків */
+#ed-block-menu{position:fixed;z-index:9500;background:rgba(6,16,25,.97);border:1px solid rgba(47,227,208,.55);
+  border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:4px;
+  font-family:"Manrope",sans-serif;min-width:160px;}
+#ed-block-menu button{border:1px solid rgba(255,255,255,.12);border-radius:7px;
+  background:rgba(255,255,255,.06);color:#f2f8fc;padding:8px 14px;
+  font:600 13px/1 "Manrope",sans-serif;cursor:pointer;text-align:left;transition:.15s;white-space:nowrap;}
+#ed-block-menu button:hover{background:rgba(47,227,208,.2);border-color:rgba(47,227,208,.5);}
+/* стилі редагування */
+body.is-edit .slide{outline:1px dashed rgba(47,227,208,.18);}
+body.is-edit [contenteditable]:hover{outline:1px dashed rgba(47,227,208,.45);border-radius:4px;cursor:text;}
+body.is-edit [contenteditable]:focus{outline:2px solid rgba(47,227,208,.7);border-radius:4px;}
+/* підказка */
+.ed-hint{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9100;
+  padding:8px 18px;background:rgba(47,227,208,.15);border:1px solid rgba(47,227,208,.4);
+  border-radius:99px;color:var(--mint);font:700 12px/1 "Manrope",sans-serif;letter-spacing:.1em;
+  text-transform:uppercase;display:none;
+}
+body.is-edit .ed-hint{display:block;}
+/* кнопка видалення блоку */
+.ed-blk-del{display:none;position:absolute;bottom:6px;right:30px;z-index:10;
+  width:20px;height:20px;border:1px solid rgba(220,80,80,.5);border-radius:4px;
+  background:rgba(6,16,25,.88);color:rgba(220,80,80,.8);font-size:11px;cursor:pointer;
+  padding:0;align-items:center;justify-content:center;line-height:1;}
+body.is-edit .card .ed-blk-del,body.is-edit .step .ed-blk-del,
+body.is-edit .fixcard .ed-blk-del,body.is-edit .pick__col .ed-blk-del,
+body.is-edit .note .ed-blk-del,body.is-edit blockquote .ed-blk-del{display:flex;}
+.ed-blk-del:hover{background:rgba(200,40,40,.9)!important;color:#fff!important;}
+/* межа одного екрану — видно тільки в режимі редагування */
+body.is-edit .slide{overflow:visible;}
+body.is-edit .slide::after{
+  content:'─── межа екрану ───';
+  position:absolute;left:0;right:0;top:100svh;
+  border-top:2px dashed rgba(220,80,80,.45);
+  color:rgba(220,80,80,.55);font:600 11px/2 "Manrope",sans-serif;
+  text-align:center;letter-spacing:.08em;pointer-events:none;z-index:20;
+}
+/* обмеження меню блоків */
+#ed-block-menu{max-height:calc(100svh - 80px);overflow-y:auto;}
+/* друк / PDF */
+@media print{
+  @page{size:A4 landscape;margin:0;}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  #ed-bar,.ed-slide-bar,.ed-hint,.rail,.progress,.ed-drag-hdl,.ed-wide-btn,.ed-blk-del{display:none!important;}
+  html,body{overflow:visible!important;background:#061019!important;}
+  body::before{display:none;}
+  .deck{display:block!important;}
+  .slide{page-break-after:always;break-after:page;min-height:0!important;height:100vh;overflow:visible!important;}
+  .slide__inner>*{opacity:1!important;transform:none!important;}
+  .ed-img-wrap{position:relative!important;display:inline-block!important;}
+  .ed-img-del,.ed-img-rz{display:none!important;}
+}
+</style>
+</head>
+<body class="">
+
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H7l-4 3v-6.5A8 8 0 0 1 11 4h2a8 8 0 0 1 8 8Z"></path></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle cx="12" cy="12" r=".8" fill="currentColor"></circle></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12.5 5.5 5.5L20 6.5"></path></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"></path><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5.9 1.2.9 1.9v.2h5.2v-.2c0-.7.3-1.4.9-1.9A6 6 0 0 0 12 3Z"></path></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 4.3 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0Z"></path><path d="M12 9.5v4M12 17h.01"></path></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5Z"></path><path d="m3 13 9 5 9-5"></path></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 17V11M13 17V7M18 17v-4"></path></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M15.5 4.5 19.5 8.5 8 20H4v-4Z"></path><path d="M13.5 6.5 17.5 10.5"></path></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18M6 6l12 12M18 6 6 18"></path></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5.5l3.5 2"></path></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"></path><path d="M14 3v5h5M9 13h6M9 17h4"></path></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.7"></circle><path d="M4.5 20a7.5 7.5 0 0 1 15 0"></path></symbol>
+</svg>
+
+
+<div class="progress"><div class="progress__bar" id="bar" style="width: 100%;"></div></div>
+<nav class="rail" aria-label="Навігація по слайдах">
+  <button class="rail__btn" id="mPrev" aria-label="Попередній слайд"><svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"></path></svg></button>
+  <div class="dots" id="dots"><button type="button" class="dot" aria-label="Слайд 1"></button><button type="button" class="dot" aria-label="Слайд 2"></button><button type="button" class="dot" aria-label="Слайд 3"></button><button type="button" class="dot" aria-label="Слайд 4"></button><button type="button" class="dot" aria-label="Слайд 5"></button><button type="button" class="dot" aria-label="Слайд 6"></button><button type="button" class="dot" aria-label="Слайд 7"></button><button type="button" class="dot" aria-label="Слайд 8"></button><button type="button" class="dot" aria-label="Слайд 9"></button><button type="button" class="dot" aria-label="Слайд 10"></button><button type="button" class="dot" aria-label="Слайд 11"></button><button type="button" class="dot" aria-label="Слайд 12"></button><button type="button" class="dot" aria-label="Слайд 13"></button><button type="button" class="dot" aria-label="Слайд 14"></button><button type="button" class="dot" aria-label="Слайд 15"></button><button type="button" class="dot" aria-label="Слайд 16"></button><button type="button" class="dot is-on" aria-label="Слайд 17"></button></div>
+  <span class="rail__count" id="mCount">17 / 17</span>
+  <button class="rail__btn" id="mNext" aria-label="Наступний слайд" disabled=""><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg></button>
+</nav>
+
+<!-- ===== EDITOR BAR ===== -->
+
+
+<main class="deck" id="deck">
+
+<!-- ===== СЛАЙД 1 — ТИТУЛЬНИЙ ===== -->
+<section class="slide is-in" data-n="01 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-spark"></use></svg> AI-Money Club · ефір з вікторією</div>
+      <h1>AI-ФОТОСЕСІЯ<br><span class="grad">БЕЗ ЗЙОМОК для себе або клієнтів</span></h1>
+      <p class="lead" style="font-size: 37px;">Як із кількох звичайних фото створити повноцінну серію контенту за допомогою AI.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 2 — СПІКЕРКА ===== -->
+<section class="slide is-in" data-n="02 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-user"></use></svg>запрошена Спікерка ефіру</div>
+      <h2>Анастасія <span class="grad">Доненко</span></h2>
+    </div>
+    <div class="cards c2">
+      <div class="card card--row card--mid" style="position: relative;"><div class="ibox"><svg class="ico"><use href="#i-clock"></use></svg></div><h3>7,5 років праці з контентом в різних соціальних мережах</h3></div>
+      <div class="card card--row card--mid" style="position: relative;"><div class="ibox"><svg class="ico"><use href="#i-user"></use></svg></div><h3>В команді Андрія Чепіка та Вікторії Соколик вже 3-й рік</h3></div>
+      <div class="card card--row card--mid" style="position: relative;"><div class="ibox"><svg class="ico"><use href="#i-layers"></use></svg></div><h3>Починала з посади СММ, далі — Керівниця контенту</h3></div>
+      <div class="card card--row card--mid" style="position: relative;"><div class="ibox"><svg class="ico"><use href="#i-target"></use></svg></div><h3>Зараз — Керівниця AI-Money Club</h3></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 3 — ПЛАН ЕФІРУ ===== -->
+<section class="slide is-in" data-n="03 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-target"></use></svg> План ефіру</div>
+      <h2>Що ми зробимо <span class="grad">за цей ефір</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step" style="position: relative;"><div class="step__n">01</div><h3>Підготуємо вихідні фото</h3></div>
+      <div class="step" style="position: relative;"><div class="step__n">02</div><h3>Знайдемо референси</h3></div>
+      <div class="step" style="position: relative;"><div class="step__n">03</div><h3>Створимо картку персонажа і локацію</h3></div>
+      <div class="step" style="position: relative;"><div class="step__n">04</div><h3>Згенеруємо серію у Google Flow</h3></div>
+      <div class="step" style="position: relative;"><div class="step__n">05</div><h3>Розберемо монетизацію</h3></div>
+    </div>
+    <div class="note" style="position: relative;"><svg class="ico"><use href="#i-bulb"></use></svg><div>На виході — не просто фото, а <b>алгоритм, який можна повторювати</b>.</div></div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 4 — НАВІЩО AI-ФОТОСЕСІЯ ===== -->
+<section class="slide is-in" data-n="04 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-spark"></use></svg> Навіщо це</div>
+      <h2>AI-фотосесія = <span class="grad">швидкий спосіб</span><br>регулярно створювати новий контент</h2>
+    </div>
+    <div class="pick__col pick__col--mint" style="position: relative;">
+      <ul>
+        <li style="font-size: 21.7px;">Без постійної організації нових зйомок</li>
+        <li style="font-size: 21.7px;">Без студії, фотографа й локації</li>
+        <li style="font-size: 21.7px;">Десятки образів і сюжетів</li>
+        <li style="font-size: 21.7px;">Контент під сезон, продукт або запуск</li>
+        <li style="font-size: 21.7px;">Фото для соцмереж, сайту, реклами й презентацій</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 5 — КРОК 1 ===== -->
+<section class="slide is-in" data-n="05 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-target"></use></svg> Крок 1</div>
+      <h2>Підготуйте 2–3 <span class="grad">вихідні фотографії</span></h2>
+    </div>
+    <div class="pick__col pick__col--mint" style="position: relative;">
+      <ul>
+        <li style="font-size: 21.7px;">Без фільтрів і сильної ретуші</li>
+        <li style="font-size: 21.7px;">З природною фактурою шкіри</li>
+        <li style="font-size: 21.7px;">З добре видимим обличчям</li>
+        <li style="font-size: 21.7px;">При нормальному освітленні</li>
+        <li style="font-size: 21.7px;">Фото середнього плану, щоб було видно фігуру</li>
+        <li style="font-size: 21.7px;">Без складного ракурсу</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 6 — КРОК 2 ===== -->
+<section class="slide is-in" data-n="06 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-pen"></use></svg> Крок 2</div>
+      <h2>Шукаємо <span class="grad">референс одягу</span></h2>
+      <p class="lead">Не вигадуємо образ з нуля — шукаємо візуальний референс.</p>
+    </div>
+    <div class="pick__col pick__col--mint" style="position: relative;">
+      <ul>
+        <li style="font-size: 21.7px;">Стиль і фасон</li>
+        <li style="font-size: 21.7px;">Матеріал і фактура</li>
+        <li style="font-size: 21.7px;">Кольорова гамма</li>
+        <li style="font-size: 21.7px;">Взуття</li>
+        <li style="font-size: 21.7px;">Аксесуари</li>
+        <li style="font-size: 21.7px;">Як одяг сидить на фігурі</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 7 — КРОК 3 ===== -->
+<section class="slide is-in" data-n="07 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-layers"></use></svg> Крок 3</div>
+      <h2>Шукаємо <span class="grad">референс локації</span></h2>
+      <p class="lead">Локація має підсилювати образ і задачу фотосесії.</p>
+    </div>
+    <div class="pick__col pick__col--mint" style="position: relative;">
+      <ul>
+        <li style="font-size: 21.7px;">Тип простору</li>
+        <li style="font-size: 21.7px;">Фон і предмети</li>
+        <li style="font-size: 21.7px;">Кольорова гама</li>
+        <li style="font-size: 21.7px;">Матеріали й текстури</li>
+        <li style="font-size: 21.7px;">Світло</li>
+        <li style="font-size: 21.7px;">Атмосфера</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 8 — ДЕ ШУКАТИ ІДЕЇ ===== -->
+<section class="slide is-in" data-n="08 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-target"></use></svg> Джерело референсів</div>
+      <h2>Де шукати <span class="grad">ідеї</span></h2>
+      <p class="lead" style="font-size: 37px;">Кращий варіант пошуку образу та референсів — Pinterest.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 9 — КРОК 4 · КАРТКА ПЕРСОНАЖА ===== -->
+<section class="slide is-in" data-n="09 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-doc"></use></svg> Крок 4 · Google Flow</div>
+      <h2>Створюємо <span class="grad">картку персонажа</span></h2>
+      <p class="lead" style="font-size: 28px;">Картка персонажа = основа AI-фотосесії.</p>
+    </div>
+    <div class="pick__col pick__col--mint" style="position: relative;">
+      <ul>
+        <li style="font-size: 21.7px;">ФОТО 1 — реальна людина</li>
+        <li style="font-size: 21.7px;">ФОТО 2 — референс одягу</li>
+        <li style="font-size: 21.7px;">Додаємо промпт</li>
+      </ul>
+    </div>
+    <div class="note" style="position: relative;"><svg class="ico"><use href="#i-doc"></use></svg><div style="font-size: 21.7px;">Завантажуємо фото у Google Flow — <b>flow.google.com</b></div></div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 10 — ПРОМПТ ДЛЯ КАРТКИ ПЕРСОНАЖА ===== -->
+<section class="slide is-in" data-n="10 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-spark"></use></svg> Крок 4 · Промпт</div>
+      <h2>Промпт для <span class="grad">картки персонажа</span></h2>
+    </div>
+    <div class="prompt">
+      <div class="prompt__head"><b>Промпт для Google Flow</b><button class="btn js-copy" type="button">Копіювати</button></div>
+<pre class="prompt__text">Use the uploaded images as follows:
+PHOTO 1 — the only reference for the person's identity, face, skin, hair and body shape.
+PHOTO 2 and any additional images — references for clothing, footwear and accessories only.
+Create one photorealistic character reference sheet showing the SAME adult person in every view.
+
+IDENTITY AND SKIN:
+Preserve the exact recognizable face, facial proportions, age, eye shape and color, nose, lips, jawline, hairstyle, hairline and hair color from PHOTO 1.
+Keep realistic skin with visible pores, fine lines, natural under-eye texture, subtle uneven tone and individual facial features. Preserve natural facial asymmetry.
+No plastic skin, beauty filter, excessive smoothing, retouching, idealization or rejuvenation.
+
+BODY:
+Read the person's real body shape directly from PHOTO 1.
+Preserve the exact shoulder width, torso length, chest, waist, abdomen, hips, arm and leg thickness, leg length, posture, height impression and overall body proportions.
+Do not create a generic model body. Do not slim the waist, lengthen the legs, enlarge or reduce body parts, broaden the shoulders or change the person's weight and build.
+
+CLOTHING:
+Dress the person exactly according to the uploaded clothing references.
+Preserve the garment type, cut, length, fit, layers, colors, patterns, materials, textures, seams and footwear. Clothing must follow the person's real body shape without changing or hiding their proportions.
+Do not copy the face, body or identity of any model shown in the clothing references.
+
+ACCESSORIES:
+Preserve every visible accessory from the references, including jewelry, glasses, watch, belt, bag, headwear and other details. Keep their exact design, color, material, size and placement.
+Add a separate small ACCESSORIES section to the reference sheet showing clear close-up details of the main accessories.
+
+CHARACTER SHEET LAYOUT:
+Show the same person in six consistent views:
+close-up frontal portrait;
+close-up 3/4 face view;
+side profile;
+medium shot;
+full-body front view;
+full-body 3/4 view.
+All views must show one identical person with the same face, body shape, hairstyle, outfit and accessories.
+
+Use a clean neutral studio background, soft even lighting, realistic anatomy and natural posture. Keep the full body completely visible in the full-length views, including the head and footwear.
+
+Create one clean professional character reference sheet, not separate images and not different people.
+Identity, real body proportions, natural skin texture, clothing and accessory consistency are the highest priorities.
+
+No stylization. No body reshaping. No distorted anatomy. No extra fingers. No duplicated body parts. No cropped head or feet. No text except small neutral view labels and the "ACCESSORIES" label.</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 11 — КРОК 5 · КАРТКА ЛОКАЦІЇ ===== -->
+<section class="slide is-in" data-n="11 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-doc"></use></svg> Крок 5 · Google Flow</div>
+      <h2>Створення <span class="grad">картки локації</span></h2>
+      <p class="lead" style="font-size: 32.2px;">У Google Flow завантажуємо знайдений референс локації, промпт<br>та створюємо картку локації без людини.</p>
+    </div>
+    <div class="note" style="position: relative;"><svg class="ico"><use href="#i-doc"></use></svg><div style="font-size: 25px;">Google Flow — <b>flow.google.com</b></div></div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 12 — ПРОМПТ ДЛЯ КАРТКИ ЛОКАЦІЇ ===== -->
+<section class="slide is-in" data-n="12 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-spark"></use></svg> Крок 5 · Промпт</div>
+      <h2>Промпт для <span class="grad">картки локації</span></h2>
+    </div>
+    <div class="prompt">
+      <div class="prompt__head"><b>Промпт для Google Flow</b><button class="btn js-copy" type="button">Копіювати</button></div>
+<pre class="prompt__text">Use the uploaded image as the reference for one real three-dimensional location.
+Create a photorealistic LOCATION REFERENCE SHEET showing the same environment from three clearly different camera positions.
+
+The three views must be:
+A wide establishing view based on the original viewing direction.
+A wide view captured after the camera has physically moved to the left side of the location and changed direction by approximately 70–90 degrees.
+A wide view captured after the camera has physically moved to the right or opposite side of the location and changed direction by approximately 70–90 degrees.
+
+Treat the reference as one view of a larger real space. Reconstruct a coherent three-dimensional environment instead of copying the original image as a flat background.
+
+Preserve across all three views:
+the same recognizable location;
+consistent architecture, terrain and spatial proportions;
+stable placement and scale of important objects;
+the same materials, textures and colors;
+the same season, weather and time of day;
+the same lighting direction, intensity and atmosphere.
+
+For areas not visible in the reference, create a natural and believable continuation of the same environment. Infer missing parts once and keep them consistent across all three views.
+
+The camera must physically change position between the views. Do not create three crops, zoom levels or minor variations of the original composition. Each view must reveal a noticeably different part of the location and provide a genuinely new perspective.
+
+Use the same realistic wide-angle lens, natural eye-level camera height, exposure and photographic style in all three views.
+
+Arrange the three complete photographs horizontally in one clean triptych with equal-sized panels. Each panel must be high-resolution and suitable for cropping and later use as a separate location reference.
+
+No people. No text. No labels. No numbers. No arrows. No logos. No watermarks. No decorative graphics. No duplicated objects, distorted architecture or impossible spatial connections.</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 13 — ПЕРЕХІД ДО РОЗКАДРОВКИ ===== -->
+<section class="slide is-in" data-n="13 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-layers"></use></svg> Розкадровка</div>
+      <h2>Переходимо до <span class="grad">розкадровки<br></span>AI-фотосесії</h2>
+      <p class="lead" style="font-size: 28px;">Один майстер-промпт створює 9 окремих англомовних промптів —<br>від дальнього плану до портрета й деталей.</p>
+    </div>
+    <div class="note" style="position: relative;"><svg class="ico"><use href="#i-check"></use></svg><div style="font-size: 25px;">У кожному кадрі зберігаються зовнішність, статура, фактура шкіри, зачіска, одяг і локація. Змінюються лише <b>план, ракурс, поза, дія, погляд і композиція</b>.</div></div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 14 — МАЙСТЕР-ПРОМПТ ===== -->
+<section class="slide is-in" data-n="14 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-spark"></use></svg> Майстер-промпт</div>
+      <h2>Промпт для <span class="grad">9 кадрів</span> фотосесії</h2>
+    </div>
+    <div class="prompt">
+      <div class="prompt__head"><b>Майстер-промпт для ChatGPT</b><button class="btn js-copy" type="button">Копіювати</button></div>
+<pre class="prompt__text">Ти — професійний режисер фотосесій і prompt-інженер. Твоє завдання — створити 9 різних промптів англійською мовою для AI-фотосесії в Google Flow.
+
+У ChatGPT фотографії не завантажуватимуться. Безпосередньо у Flow до кожного промпту будуть додані:
+ФОТО 1 — картка персонажа із зовнішністю, фігурою, одягом та аксесуарами;
+ФОТО 2 — карта однієї локації з трьома ракурсами, розташованими горизонтально.
+
+Спочатку постав рівно три запитання:
+Для кого створюємо фотосесію: для чоловіка чи жінки?
+Який настрій має передавати фотосесія?
+Який формат потрібен: 9:16, 4:5, 1:1 чи 16:9?
+
+Не запитуй про вік, призначення фотографій, зовнішність, одяг або локацію.
+
+Після відповідей створи послідовність із 9 кадрів:
+Дальній атмосферний кадр — лівий ракурс карти, людина займає невелику частину простору.
+Повний зріст — центральний ракурс карти, діагональна композиція та природна поза.
+Динамічний кадр у русі — правий ракурс карти, зйомка збоку.
+Виразний нижній або верхній ракурс — лівий ракурс карти.
+Кадр через доречний передній план — центральний ракурс карти.
+Взаємодія людини з елементом простору — правий ракурс карти.
+Живий крупний портрет у ракурсі ¾ — вибери ракурс карти з найкращою глибиною фону.
+Детальний кадр рук, одягу або аксесуарів — використай інший ракурс, ніж у кадрі №7.
+Фінальний кінематографічний кадр у русі — використай найвиразніший ракурс карти та нову композицію.
+
+Адаптуй дії людини до реальних елементів конкретної локації. Не вигадуй взаємодію з предметами, яких немає на карті.
+Кожен кадр повинен відрізнятися крупністю, положенням камери, висотою, напрямком зйомки, композицією, дією, позою та видимою частиною простору.
+
+У КОЖНОМУ англомовному промпті обов'язково вкажи:
+
+CHARACTER CARD:
+Use the uploaded CHARACTER CARD as the only identity source. Generate one photograph of the exact same recognizable person.
+Preserve the exact face, individual facial features, hairstyle, natural skin texture, body type, height impression and body proportions. Preserve the exact clothing, footwear and accessories shown on the character card.
+Do not copy the character-card layout, background or poses. Do not beautify, rejuvenate, slim, reshape or retouch the person.
+
+LOCATION MAP:
+The uploaded LOCATION MAP contains three views of the same location.
+For this frame, explicitly select only one panel: LEFT, CENTER or RIGHT. Use that panel as the primary camera direction. Use the other two panels only to understand the location's spatial structure and consistency.
+Expand the selected view into one complete full-frame photograph. Do not reproduce the three-panel layout. Do not create a collage, triptych or split screen.
+Preserve the recognizable architecture, objects, materials, textures, colors, lighting and atmosphere of the location. Do not replace the location or add unrelated objects.
+Place the person naturally in the selected view with correct scale, perspective, ground contact, lighting and realistic shadows.
+
+REALISM:
+Create a realistic professional photograph with natural anatomy, hands, posture, facial expression, fabric behavior and environmental depth.
+Preserve visible pores, fine lines, natural skin variation and individual features. No plastic skin, beauty filter, excessive retouching, distorted hands, extra fingers, duplicated body parts, additional people, text, logos or watermarks.
+
+Не перетворюй позитивний або веселий настрій на однакову широку усмішку. Передавай настрій через різні природні погляди, рухи, міміку та положення тіла.
+
+Видавай промпти по одному. Усі пояснення пиши українською. Англійською має бути лише готовий промпт для Google Flow.
+
+Формат відповіді:
+КАДР №
+Використаний ракурс карти:
+Тип кадру та ракурс камери:
+Що відбувається в кадрі:
+PROMPT FOR GOOGLE FLOW:
+[готовий англомовний промпт]
+
+Після кожного кадру запитуй:
+«Генерувати наступний кадр? Напишіть "ОК".»
+Наступний промпт створюй лише після відповіді «ОК».</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 15 — ЧОМУ AI-ФОТО НЕ СХОЖІ ===== -->
+<section class="slide slide--warn is-in" data-n="15 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow eyebrow--gold"><svg class="ico"><use href="#i-alert"></use></svg> Типові причини</div>
+      <h2>Чому AI-фото <span class="grad-gold">«не схожі на мене»</span></h2>
+    </div>
+    <div class="fixlist">
+      <div class="fixcard" style="position: relative;">
+        <div class="fixcard__problem"><div class="ibox ibox--gold"><svg class="ico"><use href="#i-pen"></use></svg></div><h3>Поганий вихідний референс</h3></div>
+        <div class="fixcard__fix"><div class="tick"><svg class="ico"><use href="#i-check"></use></svg></div><p style="font-size: 25px;">Тестуємо інше фото.</p></div>
+      </div>
+      <div class="fixcard" style="position: relative;">
+        <div class="fixcard__problem"><div class="ibox ibox--gold"><svg class="ico"><use href="#i-alert"></use></svg></div><h3>Занадто оброблене фото</h3></div>
+        <div class="fixcard__fix"><div class="tick"><svg class="ico"><use href="#i-check"></use></svg></div><p style="font-size: 25px;">AI не бачить реальну фактуру.</p></div>
+      </div>
+      <div class="fixcard" style="position: relative;">
+        <div class="fixcard__problem"><div class="ibox ibox--gold"><svg class="ico"><use href="#i-user"></use></svg></div><h3>Конфлікт референсів</h3></div>
+        <div class="fixcard__fix"><div class="tick"><svg class="ico"><use href="#i-check"></use></svg></div><p style="font-size: 25px;">Нейромережа змішує людей і деталі.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 16 — ЩО КУПУЄ КЛІЄНТ ===== -->
+<section class="slide is-in" data-n="16 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-target"></use></svg> Продаж послуги</div>
+      <h2>Що насправді <span class="grad">купує клієнт</span></h2>
+      <p class="lead" style="font-size: 24.4px;">Клієнт не купує «30 AI-картинок», клієнт купує:</p>
+    </div>
+    <div class="pick__col pick__col--mint" style="position: relative;">
+      <ul>
+        <li style="font-size: 18.9px;">Контент на місяць</li>
+        <li style="font-size: 18.9px;">Цілісну упаковку особистого бренду</li>
+        <li>Фотографії під запуск продукту</li>
+        <li>Візуал для сайту або презентації</li>
+        <li>Новий експертний образ</li>
+        <li>Регулярний контент без постійних зйомок</li>
+      </ul>
+    </div>
+    <div class="note" style="position: relative;"><svg class="ico"><use href="#i-check"></use></svg><div>Продаємо не процес генерації. <b>Продаємо рішення.</b></div></div>
+  </div>
+</section>
+
+<!-- ===== СЛАЙД 17 — ФІНАЛ ===== -->
+<section class="slide is-in" data-n="17 / 17">
+  <div class="slide__inner">
+    <div class="head">
+      <div class="eyebrow"><svg class="ico"><use href="#i-check"></use></svg> Підсумок ефіру</div>
+      <h2>Одна навичка — <span class="grad">три можливості</span></h2>
+    </div>
+    <div class="cards c3">
+      <div class="card card--row card--mid" style="position: relative;"><div class="ibox"><svg class="ico"><use href="#i-check"></use></svg></div><h3>Створювати контент для себе</h3></div>
+      <div class="card card--row card--mid" style="position: relative;"><div class="ibox"><svg class="ico"><use href="#i-check"></use></svg></div><h3>Давати більше результату клієнтам</h3></div>
+      <div class="card card--row card--mid" style="position: relative;"><div class="ibox"><svg class="ico"><use href="#i-check"></use></svg></div><h3>Продавати нову AI-послугу</h3></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== NAVIGATION JS ===== -->
+<script>
+(function(){
+  "use strict";
+  var deck=document.getElementById('deck'),
+      slides=[].slice.call(document.querySelectorAll('.slide')),
+      bar=document.getElementById('bar'),
+      dotsBox=document.getElementById('dots'),
+      counter=document.getElementById('mCount'),
+      current=0;
+
+  var pad=function(n){ return (n<10?'0':'')+n; };
+
+  function buildDots(){
+    dotsBox.innerHTML='';
+    var sl=[].slice.call(document.querySelectorAll('.slide'));
+    sl.forEach(function(s,i){
+      s.setAttribute('data-n', pad(i+1)+' / '+pad(sl.length));
+      var d=document.createElement('button');
+      d.type='button'; d.className='dot'; d.setAttribute('aria-label','Слайд '+(i+1));
+      d.addEventListener('click',function(){ go(i); });
+      dotsBox.appendChild(d);
+    });
+    counter.textContent='1 / '+sl.length;
+  }
+  buildDots();
+
+  function setActive(i){
+    var sl=[].slice.call(document.querySelectorAll('.slide'));
+    current=i;
+    var ds=[].slice.call(dotsBox.children);
+    ds.forEach(function(d,n){ d.classList.toggle('is-on',n===i); });
+    counter.textContent=(i+1)+' / '+sl.length;
+    var p=document.getElementById('mPrev'), n2=document.getElementById('mNext');
+    if(p) p.disabled=(i===0);
+    if(n2) n2.disabled=(i===sl.length-1);
+  }
+
+  var navLock=false, navTimer;
+  function go(i){
+    var sl=[].slice.call(document.querySelectorAll('.slide'));
+    i=Math.max(0,Math.min(sl.length-1,i));
+    setActive(i);
+    navLock=true; clearTimeout(navTimer);
+    navTimer=setTimeout(function(){ navLock=false; }, 700);
+    var y=sl[i].getBoundingClientRect().top+window.scrollY;
+    if(window.scrollTo){ try{ window.scrollTo({top:y,behavior:'smooth'}); return; }catch(e){} }
+    window.scrollTo(0,y);
+  }
+
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('is-in'); });
+  },{threshold:0.08});
+  document.querySelectorAll('.slide').forEach(function(s){ io.observe(s); });
+  document.querySelector('.slide').classList.add('is-in');
+  setActive(0);
+
+  var tops=[];
+  function measure(){
+    tops=[].slice.call(document.querySelectorAll('.slide')).map(function(s){
+      return s.getBoundingClientRect().top+window.scrollY;
+    });
+  }
+  measure();
+  window.addEventListener('load',measure);
+  window.addEventListener('resize',function(){ measure(); onScroll(); });
+
+  var ticking=false;
+  function onScroll(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){
+      ticking=false;
+      var max=document.documentElement.scrollHeight-window.innerHeight;
+      bar.style.width=(max>0?Math.min(100,window.scrollY/max*100):0)+'%';
+      if(navLock) return;
+      var probe=window.scrollY+window.innerHeight*0.3, idx=0;
+      for(var i=0;i<tops.length;i++){ if(tops[i]<=probe) idx=i; else break; }
+      setActive(idx);
+    });
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+
+  document.addEventListener('keydown',function(e){
+    if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if(e.target.getAttribute('contenteditable')) return;
+    if(e.ctrlKey||e.metaKey||e.altKey) return;
+    var k=e.key;
+    if(k==='ArrowDown'||k==='ArrowRight'||k==='PageDown'||k===' '){ e.preventDefault(); go(current+1); }
+    else if(k==='ArrowUp'||k==='ArrowLeft'||k==='PageUp'){ e.preventDefault(); go(current-1); }
+    else if(k==='Home'){ e.preventDefault(); go(0); }
+    else if(k==='End'){ e.preventDefault(); go(slides.length-1); }
+    else if(k==='f'||k==='F'||k==='а'||k==='А'){
+      if(document.fullscreenElement) document.exitFullscreen();
+      else if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    }
+  });
+
+  document.getElementById('mPrev').addEventListener('click',function(){ go(current-1); });
+  document.getElementById('mNext').addEventListener('click',function(){ go(current+1); });
+
+  var wLock=false, wAcc=0, wIdle;
+  var picking=false;
+  document.addEventListener('mousedown',function(){ picking=true; });
+  document.addEventListener('mouseup',function(){ setTimeout(function(){ picking=false; },450); });
+  window.addEventListener('wheel',function(e){
+    if(picking) return;
+    if(e.target.getAttribute&&e.target.getAttribute('contenteditable')) return;
+    var el=e.target;
+    while(el&&el!==document.body){
+      if(el.scrollHeight-el.clientHeight>4){
+        var st=getComputedStyle(el).overflowY;
+        if(st==='auto'||st==='scroll'){
+          var top=el.scrollTop<=0, bottom=el.scrollTop+el.clientHeight>=el.scrollHeight-1;
+          if((e.deltaY<0&&!top)||(e.deltaY>0&&!bottom)) return;
+        }
+      }
+      el=el.parentElement;
+    }
+    e.preventDefault();
+    clearTimeout(wIdle);
+    wIdle=setTimeout(function(){ wAcc=0; wLock=false; },240);
+    if(wLock) return;
+    wAcc+=e.deltaY;
+    if(Math.abs(wAcc)<40) return;
+    var dir=wAcc>0?1:-1; wAcc=0; wLock=true;
+    go(current+dir);
+  },{passive:false});
+
+  /* кнопки «Копіювати» */
+  document.addEventListener('click',function(e){
+    if(!e.target.classList.contains('js-copy')) return;
+    var btn=e.target;
+    var text=btn.closest('.prompt').querySelector('.prompt__text').innerText.trim();
+    var keepY=window.scrollY;
+    function done(){
+      var old=btn.textContent;
+      btn.textContent='Скопійовано ✓'; btn.classList.add('is-done'); btn.blur();
+      window.scrollTo(0,keepY);
+      setTimeout(function(){ btn.textContent=old; btn.classList.remove('is-done'); },1600);
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done,done);
+    } else { done(); }
+  });
+
+  /* rebuildDots при змінах DOM */
+  window._navRebuild=function(){ buildDots(); measure(); setActive(0); onScroll(); };
+})();
+</script>
+
+<!-- ===== EDITOR JS ===== -->
+
+
+
+</body></html>
